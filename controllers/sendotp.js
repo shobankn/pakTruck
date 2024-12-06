@@ -21,12 +21,14 @@ const SendOTP = async (req, res) => {
 
         const codevalue = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const info = await transport.sendMail({
-            from: process.env.USER_EMAIL,
+        
+        let info  = await transport.sendMail( {
+            from: 'shobankhan5598@gmail.com',
             to: user.email,
-            subject: "Email Verification Code",
-            html: Verification_Email_Template.replace('{verificationCode}', codevalue),
-        });
+            subject:"verification code",
+            html: Verification_Email_Template.replace("{verificationCode}",codevalue),
+           
+          })
 
         if (info.accepted.includes(user.email)) {
             const hashedOTP = hmacProcess(codevalue, process.env.HMAC_SECRET_KEY);
