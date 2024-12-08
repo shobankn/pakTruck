@@ -4,8 +4,9 @@ let mongoose = require('mongoose');
 let userSchema = new mongoose.Schema({
     fullname :{
         type:String,
-        required:[true, "name is require"],
-        trim:true
+        trim:true,
+        required: function () {
+            return this.verified;}
     },
     email:{
         type:String,
@@ -17,28 +18,26 @@ let userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:[true,"password is requires"],
         minLength:[8, "password required min 8 char"],
-        trim:true
+        trim:true,
+        required: function () {
+            return this.verified;}
     },
     role:{
         type:String,
         enum:["individual","shop"],
-        required:true
+        required: function () {
+            return this.verified;}
 
     },
     otp:{
-        type:String,
-        required:true,
+        type:String
+       
 
     },
-    VerifyOTP:{
-        type:String,
-        select:false
-    },
-
-    VerifyOTPvlidation:{
-        type:String,
+   
+    otpExpiry:{
+        type:Date,
         select:false
     },
     
@@ -46,6 +45,7 @@ let userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     }
+
 
 },{
     timestamps:true

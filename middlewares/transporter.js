@@ -6,12 +6,13 @@ const transport = nodemailer.createTransport({
   port: 465, 
   secure: true, 
   auth: {
-    user:'shobankhan5598@gmail.com',
-    pass:'yqjgqwtsckemjwhu', 
+    user:process.env.USER_EMAIL,
+    pass:process.env.USER_APP_PASSWORD, 
   },
 });
 
 module.exports = transport;
+
 
 
 

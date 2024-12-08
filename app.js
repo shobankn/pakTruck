@@ -1,12 +1,12 @@
 let express = require('express');
-let dotenv = require('dotenv');
+let dotenv = require('dotenv').config();
 let cookieparser = require('cookie-parser');
 let helmet = require('helmet');
 let Databaseconnection = require('./mongoosecon');
 let router = require('./routers/userRoute.js');
 let app  = express();
 
-dotenv.config({path:".env"});
+
 Databaseconnection();
 app.use(express.json());
 app.use(cookieparser());
