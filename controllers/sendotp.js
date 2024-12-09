@@ -1,6 +1,7 @@
 
 let User = require('../models/usermodel.js');
 let transport = require('../middlewares/transporter.js');
+let {SendotpSchema} = require('../middlewares/validator.js');
 let{Verification_Email_Template} = require('../middlewares/EmailTemplate.js');
 
 
@@ -10,6 +11,13 @@ const SendOTP = async (req, res) =>  {
     if (!email) return res.status(400).json({ error: true, message: "Email is required" });
 
     try {
+
+        let {error} = SendotpSchema.validate({email})
+
+        if(error) {
+            return res.status(401).json({error:true,message:error.details[0].message});
+        }
+
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); 
 

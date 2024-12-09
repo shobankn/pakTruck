@@ -7,14 +7,14 @@ let {doHash,doHashValidation} = require('../util/hashing.js');
 
 //  user signup 
 let Signup = async (req, res) => {
-    const { fullname, email, password, otp, role } = req.body;
+    const { fullname, email, password, otp, accountMode,cnic, address } = req.body; 
 
-    if (!fullname || !email || !password || !otp || !role) {
+    if (!fullname || !email || !password ||!otp|| !accountMode ) {
         return res.status(400).json({ error: true, message: "All fields are required" });
     }
 
     try {
-        let {error} = SignupSchema.validate({fullname,email,password,otp,role});
+        let {error} = SignupSchema.validate({fullname,email,password,otp,cnic,address});
         if(error) {
             return res.status(400).json({ error: true, message: error.details[0].message });
 
@@ -31,10 +31,15 @@ let Signup = async (req, res) => {
 
         user.fullname = fullname;
         user.password = hashedPassword;
-        user.role = role;
+        user.accountMode = accountMode;
         user.otp = undefined;
         user.otpExpiry = undefined;
         user.verified = true;
+
+        if(accountMode === 'shop') {
+            user.cnic = cnic;
+            user.address = address;
+        }
 
         await user.save();
         await transport.sendMail({
@@ -84,7 +89,7 @@ const Signin = async (req, res) => {
             {
                 userId: existUser._id,
                 email: existUser.email,
-                role: existUser.role,
+                accountMode: existUser.accountMode,
                 verified: existUser.verified,
             },
             process.env.MY_TOKEN_KEY,
@@ -202,7 +207,7 @@ const Resetpassword =  async (req, res) => {
         console.error(error);
         res.status(500).json({ error: true, message: "Internal Server Error" });
     }
-}
+} 
 
 
 

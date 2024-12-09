@@ -23,7 +23,7 @@ let userSchema = new mongoose.Schema({
         required: function () {
             return this.verified;}
     },
-    role:{
+    accountMode:{
         type:String,
         enum:["individual","shop"],
         required: function () {
@@ -32,8 +32,6 @@ let userSchema = new mongoose.Schema({
     },
     otp:{
         type:String
-       
-
     },
    
     otpExpiry:{
@@ -44,7 +42,20 @@ let userSchema = new mongoose.Schema({
     verified:{
         type:Boolean,
         default:false
-    }
+    },
+    
+    cnic: {
+        type: String,
+        required: function () {
+            return this.accountMode === "shop";
+        }
+    },
+    address: {
+        type: String,
+        required: function () {
+            return this.accountMode === "shop";
+        }
+    },
 
 
 },{
