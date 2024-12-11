@@ -11,11 +11,16 @@ let SignupSchema = joi.object({
     email:joi.string().email({tlds:{allow:['com','net','org','edu']}}),
     password:joi.string().min(8)
      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$')),
+     
     otp:joi.string().pattern(new RegExp('^\\d{6}$')),
+
+    shopName: joi.string()
+    .when('accountMode', { is: 'shop', then: joi.required() }),
 
     cnic: joi.string()
         .pattern(new RegExp('^\\d{13}$')) 
         .when('accountMode', { is: 'shop', then: joi.required() }),
+
     address: joi.string()
         .when('accountMode', { is: 'shop', then: joi.required() })
     

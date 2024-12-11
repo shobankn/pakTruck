@@ -6,7 +6,8 @@ let userSchema = new mongoose.Schema({
         type:String,
         trim:true,
         required: function () {
-            return this.verified;}
+            return this.accountMode === 'individual'}
+             
     },
     email:{
         type:String,
@@ -42,6 +43,15 @@ let userSchema = new mongoose.Schema({
     verified:{
         type:Boolean,
         default:false
+    },
+
+    shopName :{
+        type:String,
+        trim:true,
+        required : function(){
+            return this.accountMode === 'shop'
+        } 
+
     },
     
     cnic: {

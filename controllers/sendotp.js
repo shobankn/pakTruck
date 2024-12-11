@@ -1,7 +1,7 @@
 
 let User = require('../models/usermodel.js');
 let transport = require('../middlewares/transporter.js');
-let {SendotpSchema} = require('../middlewares/validator.js');
+let {SendotpSchema} = require('../validator/Uservalidator.js');
 let{Verification_Email_Template} = require('../middlewares/EmailTemplate.js');
 
 
