@@ -1,15 +1,19 @@
 const jwt = require('jsonwebtoken');
-const {SignupSchema,SigninSchema,ResetpasswordSchema} = require('../validator/Uservalidator.js');
+const {SignupSchema,SigninSchema,ResetpasswordSchema,SendotpSchema} = require('../validator/Uservalidator.js');
 const User = require('../models/usermodel.js');
 const {doHash,doHashValidation} = require('../util/hashing.js');
 const transport = require('../middlewares/transporter.js');
-const {Welcome_Email_Template,Forget_Password_Template,password_Reset_Successfully_Template} = require('../middlewares/EmailTemplate.js');
+const {Welcome_Email_Template,Forget_Password_Template,password_Reset_Successfully_Template,Verification_Email_Template} = require('../middlewares/EmailTemplate.js');
+
+
+
+
 
 // Register Service
-let SignupService = async({ fullname, email, password, otp, accountMode,shopName,cnic, address })=> {
+let SignupService = async({ fullname, email, password, otp, accountMode,shopName,cnic, address,role })=> {
 
     try{
-        if(  !email || !password || !otp || !accountMode) {
+        if(  !email || !password || !otp || !accountMode||!role) {
             throw new Error("All Fields Are Required");
         }
 
@@ -19,17 +23,17 @@ let SignupService = async({ fullname, email, password, otp, accountMode,shopName
             throw new Error(error.message || "Validation Error");
                 }
 
-            const user = await User.findOne({email})
+            let user = await User.findOne({email})
 
             if(!user) {
-                throw new Error("To Register your self please send otp first")
+                throw new Error("To Register your self please send otp first!")
             }
             
             if(user.otp !== otp || user.otpExpiry < new Date()) {
                 throw new Error(" Invalid OR Expired OTP")
             }
             if(user.verified) {
-                throw new Error('User account already verified');
+                throw new Error('User account already verified!');
             }
            
 
@@ -41,7 +45,8 @@ let SignupService = async({ fullname, email, password, otp, accountMode,shopName
             user.accountMode = accountMode,
             user.otp = undefined,
             user.otpExpiry = undefined,
-            user.verified = true
+            user.verified = true,
+            user.role = role || 'seller'
 
             if(accountMode === "shop") {
                 user.shopName = shopName,

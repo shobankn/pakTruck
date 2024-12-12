@@ -31,6 +31,15 @@ let userSchema = new mongoose.Schema({
             return this.verified;}
 
     },
+
+
+    role:{
+        type:String,
+        enum:["admin","bayer","seller","user"],
+        default:"seller"
+  
+    },
+
     otp:{
         type:String
     },
