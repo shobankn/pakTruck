@@ -76,6 +76,39 @@ let userSchema = new mongoose.Schema({
         }
     },
 
+    accountCategory: {
+        type: String,
+        enum: ["factory", "showroom", "shop"],
+        required: function () {
+            return this.accountMode === 'shop';
+        }
+    },
+
+
+    // ACCOUNT VERIFICATION SCHEMA 
+    phone: {
+        type: String,
+        trim: true,
+      },
+    
+      frontID: {
+        type: String,
+    
+      },
+      backID: {
+        type: String,
+    
+      },
+      shopPicture: {
+        type: String,
+      },
+      verificationStatus:{
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'under_review'],
+        default: 'pending',
+      }
+
+
 
 },{
     timestamps:true

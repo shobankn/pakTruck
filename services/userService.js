@@ -6,18 +6,15 @@ const transport = require('../middlewares/transporter.js');
 const {Welcome_Email_Template,Forget_Password_Template,password_Reset_Successfully_Template,Verification_Email_Template} = require('../middlewares/EmailTemplate.js');
 
 
-
-
-
 // Register Service
-let SignupService = async({ fullname, email, password, otp, accountMode,shopName,cnic, address,role })=> {
+let SignupService = async({ fullname, email, password, otp, accountMode,shopName,cnic, address,role,accountCategory })=> {
 
     try{
         if(  !email || !password || !otp || !accountMode||!role) {
             throw new Error("All Fields Are Required");
         }
 
-        let {error}  = SignupSchema.validate({fullname,email,password,otp,shopName,cnic,address}) 
+        let {error}  = SignupSchema.validate({fullname,email,password,otp,shopName,cnic,address,role,accountCategory}) 
 
         if(error) {
             throw new Error(error.message || "Validation Error");
@@ -48,17 +45,22 @@ let SignupService = async({ fullname, email, password, otp, accountMode,shopName
             user.verified = true,
             user.role = role || 'seller'
 
-            if(accountMode === "shop") {
+            if(accountMode === "shop")
+                if(!accountCategory) {
+                    throw new Error('Account Category Is Required For Account Shop!')
+                }
+                {
                 user.shopName = shopName,
                 user.cnic = cnic,
-                user.address = address
+                user.address = address,
+                user.accountCategory = accountCategory
             }
             await user.save();
             await transport.sendMail({
                 from:process.env.USER_EMAIL,
                 to: email,
                 subject: "WELL COME",
-                html : Welcome_Email_Template.replace('{name}',user.fullname)
+                html : Welcome_Email_Template.replace('{name}',fullname)
 
             })
             return {success:true,message:" User Account Has Been Created and Verified Successfully"}
@@ -101,6 +103,7 @@ const SigninService = async ({ email, password }) => {
                 email: existUser.email,
                 accountMode: existUser.accountMode,
                 verified: existUser.verified,
+                role:existUser.role
             },
             process.env.MY_TOKEN_KEY,
             { expiresIn: '5h' }

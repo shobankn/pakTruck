@@ -1,7 +1,7 @@
 
-let {SendOTPService} = require('../services/otpService.js');;
+let {SendOTPService,sendOtpMobileService} = require('../services/otpService.js');
 
-
+// Send  OTP to Email
 const SendOTP = async (req, res) => {
     try {
         let result = await SendOTPService(req.body);
@@ -11,9 +11,20 @@ const SendOTP = async (req, res) => {
     }
 };
 
+// send otp to mobile
+const SendOTPMobile = (req,res)=>{
+    try{
+        let result = sendOtpMobileService(req.body);
+        res.status(200).json(result);
+
+    }catch(error){
+        res.status(500).json({error:true,message:error.message});
+    }
+}
 
 
-module.exports = { SendOTP };
+
+module.exports = { SendOTP,SendOTPMobile};
 
 
 

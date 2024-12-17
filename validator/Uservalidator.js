@@ -1,11 +1,14 @@
 let joi = require('joi');
 
 
+// send Email Schema
 let SendotpSchema = joi.object({
     email:joi.string().required()
     .email({tlds:{allow:['com','net','org','edu']}})
 
 })
+
+// User Register Schema
 let SignupSchema = joi.object({
     fullname: joi.string(),
     email:joi.string().email({tlds:{allow:['com','net','org','edu']}}),
@@ -22,10 +25,18 @@ let SignupSchema = joi.object({
         .when('accountMode', { is: 'shop', then: joi.required() }),
 
     address: joi.string()
-        .when('accountMode', { is: 'shop', then: joi.required() })
-    
+        .when('accountMode', { is: 'shop', then: joi.required() }),
 
-})
+        role:joi.string()
+        .valid('admin','bayer','seller','user')
+        .default('seller'),
+
+        accountCategory:joi.string()
+        .valid('factory','showroom','shop')
+
+    })
+
+    // User Login Schema
 let SigninSchema = joi.object({
     email:joi.string().required().email({
         tlds:{allow:['com','net','org','edu']}
@@ -36,6 +47,7 @@ let SigninSchema = joi.object({
 
 });
 
+//  Password Forget Schema
 let ResetpasswordSchema = joi.object({
     email:joi.string().required().email({tlds:{allow:['com','net','org','edu']}}),
     newpassword:joi.string().required()

@@ -38,7 +38,7 @@ const isAuthenticated = async (req, res, next) => {
     }
 };
 
-
+// To Authorized the roles
 const authorizeRole = (...roles) => {
     return (req, res, next) => {
         try {
