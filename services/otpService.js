@@ -51,40 +51,70 @@ let SendOTPService = async ({ email }) => {
 // send OTP on Mobile
 let sendOtpMobileService = async({ phone }) => {
     try {
+
         if (!phone) {
-            throw new Error("Phone Number is Required!");
+            return res.status(400).json({ error: true, message: "Phone number is required" });
         }
-        
-        
-        // Check if user already exists
+
+       
+        const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
+        const otpExpiry = Date.now() + 10 * 60 * 1000; // 10-minute expiry
+
+     
         let user = await User.findOne({ phone });
-        if (user) {
-            throw new Error("Phone Number is Already Exists!");
+        if (!user) {
+            user = new User({ phone });
         }
 
-        // Generate OTP and expiry
-        let otp = Math.floor(100000 + Math.random() * 900000).toString();
-        let otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes expiry
-
-        // Save OTP details in database
-        user = new User({ phone, otp, otpExpiry });
+        // Update OTP details
         user.otp = otp;
         user.otpExpiry = otpExpiry;
         await user.save();
 
         // Send OTP via Twilio
         await client.messages.create({
-            from: process.env.MOBILE_PHONE,  
-            to:phone,
-            body: `Verification code is ${otp}`
+            from: process.env.MOBILE_PHONE,
+            to: phone,
+            body: `Your verification code is ${otp}`,
         });
 
-        return { success: true, message: "OTP is sent to mobile phone" };
+        return ({ success: true, message: " Mobile OTP sent successfully" })
 
     } catch (error) {
         throw new Error(error.message || "Mobile OTP Sending Failed!");
     }
 };
 
+// verify mobile otp
+let VerifyMobileOTP = async({otp})=>{
 
-module.exports = {SendOTPService,sendOtpMobileService}
+    try{
+        if(!otp) {
+            throw new Error(" otp is required!");
+        }
+        let user = await User.findOne({otp})
+
+        if(!user) {
+            throw new Error("Invalid OTP");
+        }
+
+        if(Date.now()> user.otpExpiry) {
+            throw new Error("OTP has Expired!")
+        }
+
+        user.otp = undefined,
+        user.otpExpiry = undefined,
+        user.verified = true
+        await user.save()
+
+        return({success: true,message:"OTP verified Successfully",user})
+
+
+
+    }catch(error) {
+        throw new Error(error.message || "mobile OTP sending Failed");
+    }
+
+}
+
+module.exports = {SendOTPService,sendOtpMobileService,VerifyMobileOTP}

@@ -1,5 +1,5 @@
 
-let {SendOTPService,sendOtpMobileService} = require('../services/otpService.js');
+let {SendOTPService,sendOtpMobileService,VerifyMobileOTP} = require('../services/otpService.js');
 
 // Send  OTP to Email
 const SendOTP = async (req, res) => {
@@ -18,13 +18,23 @@ const SendOTPMobile = (req,res)=>{
         res.status(200).json(result);
 
     }catch(error){
-        res.status(500).json({error:true,message:error.message});
+        res.status(500).json({error:true,message:error.message|| "internal server Error"});
+    }
+}
+// verify Mobile OTP
+const MobileOTP = async(req,res) => {
+    try{
+        let {otp} = req.body;
+        let result = await VerifyMobileOTP({otp});
+        res.status(200).json(result);
+
+    }catch(error) {
+        res.status(500).json({error:true,message: error.message});
     }
 }
 
 
-
-module.exports = { SendOTP,SendOTPMobile};
+module.exports = {SendOTP,SendOTPMobile,MobileOTP};
 
 
 

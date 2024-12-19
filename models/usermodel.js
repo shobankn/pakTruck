@@ -22,16 +22,17 @@ let userSchema = new mongoose.Schema({
         minLength:[8, "password required min 8 char"],
         trim:true,
         required: function () {
-            return this.verified;}
+            return this.verified && this.password
+        }
     },
     accountMode:{
         type:String,
         enum:["individual","shop"],
         required: function () {
-            return this.verified;}
+            return this.verified && this.accountMode
+        }
 
     },
-
 
     role:{
         type:String,
@@ -89,6 +90,7 @@ let userSchema = new mongoose.Schema({
     phone: {
         type: String,
         trim: true,
+        unique: true
       },
     
       frontID: {

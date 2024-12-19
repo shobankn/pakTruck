@@ -41,14 +41,19 @@ const upload = multer({
 
 
 
-const uploadFields = upload.fields([
+const uploadForIndividual = upload.fields([
+    { name: 'frontID', maxCount: 1 },
+    { name: 'backID', maxCount: 1 },
+  ]);
+
+  const uploadForShop = upload.fields([
     { name: 'frontID', maxCount: 1 },
     { name: 'backID', maxCount: 1 },
     { name: 'shopPicture', maxCount: 1 },
   ]);
 
 
-  module.exports = {uploadFields};
+  module.exports = {uploadForIndividual,uploadForShop};
 
 
 

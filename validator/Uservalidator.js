@@ -55,4 +55,9 @@ let ResetpasswordSchema = joi.object({
     otp:joi.string().pattern(new RegExp('^\\d{6}$'))
 })
 
-module.exports = {SendotpSchema,SignupSchema,SigninSchema,ResetpasswordSchema};
+let AccountVerifySchema = joi.object({
+    phone:joi.string().pattern(/^\d{11}$/),
+    
+})
+
+module.exports = {SendotpSchema,SignupSchema,SigninSchema,ResetpasswordSchema,AccountVerifySchema};
