@@ -49,11 +49,15 @@ const uploadForIndividual = upload.fields([
   const uploadForShop = upload.fields([
     { name: 'frontID', maxCount: 1 },
     { name: 'backID', maxCount: 1 },
-    { name: 'shopPicture', maxCount: 1 },
+    { name: 'shopPicture', maxCount: 1},
   ]);
 
+  const uploadProfile = upload.fields(
+   [ { name: 'profile', maxCount: 1 }]
+  );
 
-  module.exports = {uploadForIndividual,uploadForShop};
+
+  module.exports = {uploadForIndividual,uploadForShop,uploadProfile};
 
 
 

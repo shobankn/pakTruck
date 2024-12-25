@@ -102,12 +102,8 @@ let  processImage = async (filePath) => {
 //   return { message: 'Account verified successfully!', existingUser };
 // };
 
+
 // Account Verification for individual
-
-// Account Verification for shop
-
-
-
 const IndividualAccountVerify = async (data, files) => {
   const { fullname, email, phone } = data;
 
@@ -173,7 +169,7 @@ const IndividualAccountVerify = async (data, files) => {
 };
 
 
-// Account Verification for individual
+// Account Verification for shop
 const ShopAccountVerify = async (data, files) => {
   const { shopName, email, phone, address } = data;
 
@@ -194,7 +190,7 @@ const ShopAccountVerify = async (data, files) => {
 
 
   if (existingUser.accountMode !== 'shop') {
-    throw new Error('Invalid account type: This action is only available for Individual accounts. Please switch to an Individual account!');
+    throw new Error('Invalid account type: This action is only available for Shop  accounts. Please switch to an shop account!');
   }
 
   // Validate file uploads
@@ -225,6 +221,7 @@ const ShopAccountVerify = async (data, files) => {
       const backIDPath = backID.mimetype.startsWith('image/')
           ? await processImage(backID.path)
           : backID.path;
+
       const shopPicturePath = shopPicture.mimetype.startsWith('image/')
           ? await processImage(shopPicture.path)
           : shopPicture.path;

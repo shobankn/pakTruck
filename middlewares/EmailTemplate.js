@@ -348,10 +348,12 @@ const password_Reset_Successfully_Template = `
 `;
 
 
+
 module.exports=
 {
     Verification_Email_Template,
     Welcome_Email_Template,
     Forget_Password_Template,
-    password_Reset_Successfully_Template
+    password_Reset_Successfully_Template,
+    
 }

@@ -90,8 +90,8 @@ let userSchema = new mongoose.Schema({
     phone: {
         type: String,
         trim: true,
-        unique: true
-      },
+        unique:true
+        },
     
       frontID: {
         type: String,
@@ -108,7 +108,19 @@ let userSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'approved', 'rejected', 'under_review'],
         default: 'pending',
-      }
+      },
+
+    //   sign up api with UID 
+
+    Uid : {
+        type:String,
+        unique: true,
+        },
+
+
+    profilePicture :{
+        type:String
+    }
 
 
 

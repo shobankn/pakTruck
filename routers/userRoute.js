@@ -1,11 +1,11 @@
 let express = require('express');
 let router = express.Router();
 let {Signup,Signin, Signout, Forgetpassword, Resetpassword} = require('../controllers/userControll.js');
-let{SendOTP, SendOTPMobile,MobileOTP} = require('../controllers/otpControll.js')
+let{SendOTP, SendOTPMobile,MobileOTP,SendOTPwithUid,verifyUserEmailOtp,SignupWithUid} = require('../controllers/otpControll.js')
 const {isAuthenticated,authorizeRole} = require('../middlewares/auth.js');
 let {Admin,Bayer,Seller,User} = require('../controllers/adminControll.js');
 let {VerifyIndividual,VerifyShop} = require('../controllers/accountVerifyControll.js');
-let {uploadForIndividual,uploadForShop} = require('../middlewares/multerUpload.js');
+let {uploadForIndividual,uploadForShop,uploadProfile} = require('../middlewares/multerUpload.js');
 
 
 
@@ -24,6 +24,9 @@ let {uploadForIndividual,uploadForShop} = require('../middlewares/multerUpload.j
             router.route('/verifymobileotp').post(MobileOTP);
             router.route('/verify/individual').post(uploadForIndividual,VerifyIndividual);
             router.route('/verify/shop').post(uploadForShop,VerifyShop);
+            router.route('/sendotpwithuid').post(SendOTPwithUid);
+            router.route('/verifyemailotp').post(verifyUserEmailOtp);
+            router.route('/signupwithuid').post(uploadProfile,SignupWithUid);
 
 
  module.exports = router;

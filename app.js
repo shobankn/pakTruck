@@ -18,7 +18,6 @@ app.use(cookieparser());
 app.use(helmet());
 app.use(express.urlencoded({extended:true}));
 
-
 // API
 app.use('/api',router);
 
