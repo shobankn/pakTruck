@@ -1,6 +1,6 @@
 let {hash, compare} = require('bcryptjs');
 const {createHmac} = require('crypto');
-const { customAlphabet } = require('nanoid');
+// const { customAlphabet } = require('nanoid');
 
 let doHash = (value,setvalue) => {
     let result = hash(value,setvalue);
@@ -19,7 +19,7 @@ let hmacProcess = (value,key)=>{
 }
 
 // using nanoid to generateUID
-const generateUID = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 6);
+const generateUID = ""//customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 6);
 
 
 module.exports = {doHash,doHashValidation,hmacProcess,generateUID};

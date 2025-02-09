@@ -68,6 +68,7 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: function () {
             return this.accountMode === "shop";
+            
         }
     },
     address: {
